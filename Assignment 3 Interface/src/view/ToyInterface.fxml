@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane id="borderpane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ToyManagerInterface">
+   <top>
+      <AnchorPane prefHeight="606.0" prefWidth="941.0" BorderPane.alignment="CENTER">
+         <children>
+            <TabPane prefHeight="606.0" prefWidth="942.0" stylesheets="@application.css" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab id="tabHome" fx:id="tabHome" text="Home">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="439.0" prefWidth="589.0" />
+                  </content>
+                </Tab>
+                <Tab text="Add Toy">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+                  <Tab text="Remove Toy">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ListView fx:id="lvRemoveItem" layoutX="355.0" layoutY="37.0" prefHeight="468.0" prefWidth="538.0" stylesheets="@application.css" />
+                              <Separator layoutX="29.0" layoutY="149.0" prefHeight="2.0" prefWidth="286.0" />
+                              <Separator layoutX="33.0" layoutY="362.0" prefHeight="0.0" prefWidth="284.0" />
+                              <Label layoutX="36.0" layoutY="175.0" text="Enter Serial Number:">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="37.0" layoutY="37.0" text="REMOVING A TOY">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="tfSerialNum" layoutX="51.0" layoutY="203.0" prefHeight="26.0" prefWidth="247.0" />
+                              <Button fx:id="btnRemove" layoutX="88.0" layoutY="387.0" mnemonicParsing="false" onAction="#btnRemoveHandler" prefHeight="38.0" prefWidth="157.0" text="Remove" textFill="RED">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
+                              <Label fx:id="lblRemoveMsg" layoutX="473.0" layoutY="523.0" prefHeight="20.0" prefWidth="302.0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children></AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Gift Suggestion">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Label layoutX="37.0" layoutY="37.0" text="SUGGESTING A TOY">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <ListView fx:id="lvSuggest" layoutX="355.0" layoutY="37.0" prefHeight="468.0" prefWidth="538.0" stylesheets="@application.css" />
+                              <Separator layoutX="29.0" layoutY="149.0" prefHeight="2.0" prefWidth="286.0" />
+                              <Separator layoutX="29.0" layoutY="371.0" prefHeight="2.0" prefWidth="286.0" />
+                              <Label layoutX="36.0" layoutY="168.0" text="Enter Age:">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="37.0" layoutY="236.0" text="Enter Price Range (e.g, $10.00-$20.00):">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField layoutX="51.0" layoutY="195.0" prefHeight="26.0" prefWidth="247.0" />
+                              <TextField layoutX="51.0" layoutY="262.0" prefHeight="26.0" prefWidth="247.0" />
+                              <Label layoutX="37.0" layoutY="303.0" text="Select Toy Type:">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="cbToyTypeDropDown" layoutX="148.0" layoutY="301.0" prefWidth="150.0" visibleRowCount="0" />
+                           </children></AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Modify Database">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Label layoutX="37.0" layoutY="37.0" text="APPLYING MODIFICATIONS">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="btnSave" layoutX="401.0" layoutY="487.0" mnemonicParsing="false" onAction="#btnSaveHandler" prefHeight="37.0" prefWidth="131.0" text="Apply Changes">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
+                              <Text layoutX="395.0" layoutY="469.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Note: action is irreverseble!" />
+                              <Text layoutX="325.0" layoutY="439.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By clicking the button below, all changes will be saved. " />
+                           </children></AnchorPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
+   </top>
+</BorderPane>

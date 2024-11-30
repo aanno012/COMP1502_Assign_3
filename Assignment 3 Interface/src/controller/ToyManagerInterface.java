@@ -1,4 +1,4 @@
-package mru.toys.controller;
+package controller;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,18 +6,24 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import mru.toys.exceptions.InvalidNumberOfPlayersException;
-import mru.toys.exceptions.NegativePriceException;
-import mru.toys.model.Animal;
-import mru.toys.model.BoardGame;
-import mru.toys.model.Figure;
-import mru.toys.model.Puzzle;
-import mru.toys.model.Toy;
-import mru.toys.view.ToyMenu;
+import exceptions.InvalidNumberOfPlayersException;
+import exceptions.NegativePriceException;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TextField;
+import model.Animal;
+import model.BoardGame;
+import model.Figure;
+import model.Puzzle;
+import model.Toy;
 
-public class ToyManager {
+public class ToyManagerInterface {
 	/**
 	 * This class handles all processes in the program.
 	 */
@@ -25,21 +31,42 @@ public class ToyManager {
 	// Variables
 	private final String FILE_PATH = "res/toys.txt"; // Location of database file
 	ArrayList<Toy> toys;
-	ToyMenu toyMenu;
-	Scanner input;
+//	ToyGUIManager toyGUIMg;
+
+	@FXML
+	private Button btnRemove;
+
+	@FXML
+	private Button btnSave;
+
+	@FXML
+	private ComboBox<?> cbToyTypeDropDown;
+
+	@FXML
+	private Label lblRemoveMsg;
+
+	@FXML
+	private ListView<Toy> lvRemoveItem;
+
+	@FXML
+	private ListView<Toy> lvSuggest;
+
+	@FXML
+	private Tab tabHome;
+
+	@FXML
+	private TextField tfSerialNum;
 
 	/**
 	 * Constructor
 	 * 
 	 * @throws IOException
 	 */
-	public ToyManager() throws IOException {
-		input = new Scanner(System.in); // For user inputs
+	public ToyManagerInterface() throws IOException {
 		toys = new ArrayList<Toy>(); // Empty arrayList for the toys.
-		toyMenu = new ToyMenu(); // ToyMenu object
-		toyMenu.showWelcomeMsg(); // Displays welcome message.
 		loadToyData(); // Loads toy data into program.
-		launchToyApp(); // Launches the program.
+//		toyGUIMg = new ToyGUIManager();
+//		launchToyApp(); // Launches the program.
 //		printAllToys(toys); // Printing to console for testing.
 	}
 
@@ -186,7 +213,7 @@ public class ToyManager {
 	 */
 	public void removeToy() {
 		// Receives serial number.
-		String toySerialStr = toyMenu.askSerialNum();
+		String toySerialStr = tfSerialNum.getText();
 
 		// Looping through the toys list
 		Toy removeThisToy = null;
@@ -197,88 +224,88 @@ public class ToyManager {
 			}
 		}
 
-		// Displaying toy information.
+		// Displaying information and removing toy.
 		if (removeThisToy != null) {
-			toyMenu.showFoundMsg();
-			System.out.println();
-			System.out.println("\t" + removeThisToy.toString());
-			System.out.println();
-
-			// Asking for user confirmation
-			char ans = toyMenu.askToConfirm();
-			if (ans == 'y') {
-				toys.remove(removeThisToy);
-				toyMenu.showRemoveMsg();
-			}
-
-			// Displays item not found
+			lvRemoveItem.getItems().clear();
+			lvRemoveItem.getItems().addAll(removeThisToy);
+			toys.remove(removeThisToy);
+			lblRemoveMsg.setText("The toy has been removed successfully!");
 		} else {
-			toyMenu.showNotFoundMsg();
+			lvRemoveItem.getItems().clear();
+			lblRemoveMsg.setText("The toy you are trying to remove does not exist.");
 		}
+	}
 
-		// Returns to main menu.
-		toyMenu.pressEnter();
+	@FXML
+	void btnRemoveHandler(ActionEvent event) {
+		removeToy();
+	}
+
+	@FXML
+	void btnSaveHandler(ActionEvent event) throws IOException {
+		saveExit();
 	}
 
 	// public Toy createToyFromInput() {
-	// 	System.out.print("Enter Serial Number: ");
-	// 	String serialNumber = toyMenu.askSerialNum();
-	// 	System.out.print("Enter Toy Name: ");
-	// 	String name = input.nextLine().trim();
-	// 	while (name.isEmpty()) {
-	// 		System.out.println("Please enter a valid name.");
-	// 		System.out.print("Enter Toy Name: ");
-	// 		name = input.nextLine().trim();
-	// 	}
-	// 	System.out.print("Enter Brand: ");
-	// 	String brand = input.nextLine().trim();
-	// 	while (brand.isEmpty()) {
-	// 		System.out.println("Please enter a valid brand.");
-	// 		System.out.print("Enter Brand: ");
-	// 		brand = input.nextLine().trim();
-	// 	}
-	// 	double price = -1;
+	// System.out.print("Enter Serial Number: ");
+	// String serialNumber = toyMenu.askSerialNum();
+	// System.out.print("Enter Toy Name: ");
+	// String name = input.nextLine().trim();
+	// while (name.isEmpty()) {
+	// System.out.println("Please enter a valid name.");
+	// System.out.print("Enter Toy Name: ");
+	// name = input.nextLine().trim();
+	// }
+	// System.out.print("Enter Brand: ");
+	// String brand = input.nextLine().trim();
+	// while (brand.isEmpty()) {
+	// System.out.println("Please enter a valid brand.");
+	// System.out.print("Enter Brand: ");
+	// brand = input.nextLine().trim();
+	// }
+	// double price = -1;
 
-	// 	while (price <= 0) {
-	// 		System.out.print("Enter Price: ");
-	// 		if (input.hasNextDouble()) {
-	// 			price = input.nextDouble();
-	// 			if (price <= 0) {
-	// 				System.out.println("Price must be positive. Enter a valid price.");
-	// 			}
-	// 		} else {
-	// 			System.out.println("Enter a numeric value for price.");
-	// 			input.next(); // Consume invalid input
-	// 		}
-	// 	}
-	// 	int availableCount = -1;
-	// 	while (availableCount < 0) {
-	// 		System.out.print("Enter Available Count: ");
-	// 		if (input.hasNextInt()) {
-	// 			availableCount = input.nextInt();
-	// 			if (availableCount < 0) {
-	// 				System.out.println("Please enter a valid count.");
-	// 			}
-	// 		} else {
-	// 			System.out.println("Invalid input.");
-	// 			input.next(); // Consume invalid input
-	// 		}
-	// 	}
-	// 	input.nextLine(); // Consume newline after number input
-	// 	System.out.print("Enter Minimum Age: ");
-	// 	int ageAppropriate = input.nextInt();
-	// 	input.nextLine(); // Consume newline
-	// 	System.out.print("Enter Minimum Players: ");
-	// 	int minimumPlayers = input.nextInt();
-	// 	input.nextLine(); // Consume newline
-	// 	System.out.print("Enter Maximum Players: ");
-	// 	int maximumPlayers = input.nextInt();
-	// 	input.nextLine(); // Consume newline
-	// 	System.out.print("Enter Designer Names: ");
-	// 	String designerNames = input.nextLine().trim();
-	// 	// Now you can create a Toy object using the collected information
-	// 	Toy toy = new Toy(serialNumber, name, brand, price, availableCount, ageAppropriate, minimumPlayers, maximumPlayers, designerNames);
-	// 	return toy;
+	// while (price <= 0) {
+	// System.out.print("Enter Price: ");
+	// if (input.hasNextDouble()) {
+	// price = input.nextDouble();
+	// if (price <= 0) {
+	// System.out.println("Price must be positive. Enter a valid price.");
+	// }
+	// } else {
+	// System.out.println("Enter a numeric value for price.");
+	// input.next(); // Consume invalid input
+	// }
+	// }
+	// int availableCount = -1;
+	// while (availableCount < 0) {
+	// System.out.print("Enter Available Count: ");
+	// if (input.hasNextInt()) {
+	// availableCount = input.nextInt();
+	// if (availableCount < 0) {
+	// System.out.println("Please enter a valid count.");
+	// }
+	// } else {
+	// System.out.println("Invalid input.");
+	// input.next(); // Consume invalid input
+	// }
+	// }
+	// input.nextLine(); // Consume newline after number input
+	// System.out.print("Enter Minimum Age: ");
+	// int ageAppropriate = input.nextInt();
+	// input.nextLine(); // Consume newline
+	// System.out.print("Enter Minimum Players: ");
+	// int minimumPlayers = input.nextInt();
+	// input.nextLine(); // Consume newline
+	// System.out.print("Enter Maximum Players: ");
+	// int maximumPlayers = input.nextInt();
+	// input.nextLine(); // Consume newline
+	// System.out.print("Enter Designer Names: ");
+	// String designerNames = input.nextLine().trim();
+	// // Now you can create a Toy object using the collected information
+	// Toy toy = new Toy(serialNumber, name, brand, price, availableCount,
+	// ageAppropriate, minimumPlayers, maximumPlayers, designerNames);
+	// return toy;
 	// }
 
 	/**
@@ -414,8 +441,6 @@ public class ToyManager {
 	 * @throws IOException
 	 */
 	private void saveExit() throws IOException {
-		toyMenu.showSaveMsg(); // Saving message.
-
 		// File handling
 		File toyFile = new File(FILE_PATH);
 		PrintWriter pw = new PrintWriter(toyFile);
