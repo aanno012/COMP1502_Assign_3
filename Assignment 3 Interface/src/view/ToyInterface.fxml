@@ -25,8 +25,57 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="439.0" prefWidth="589.0" />
                   </content>
                 </Tab>
-                <Tab text="Add Toy">
-                  <content>
+<Tab text="Add Toy">
+    <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="600.0">
+            <children>
+                <Label layoutX="20.0" layoutY="20.0" text="ADD A NEW TOY">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <Label layoutX="20.0" layoutY="60.0" text="Serial Number:" />
+                <TextField fx:id="tfSerialNumber" layoutX="150.0" layoutY="55.0" prefWidth="200.0" />
+
+                <Label layoutX="20.0" layoutY="100.0" text="Name:" />
+                <TextField fx:id="tfName" layoutX="150.0" layoutY="95.0" prefWidth="200.0" />
+
+                <Label layoutX="20.0" layoutY="140.0" text="Brand:" />
+                <TextField fx:id="tfBrand" layoutX="150.0" layoutY="135.0" prefWidth="200.0" />
+
+                <Label layoutX="20.0" layoutY="180.0" text="Price:" />
+                <TextField fx:id="tfPrice" layoutX="150.0" layoutY="175.0" prefWidth="200.0" />
+
+                <Label layoutX="20.0" layoutY="220.0" text="Available Count:" />
+                <TextField fx:id="tfAvailableCount" layoutX="150.0" layoutY="215.0" prefWidth="200.0" />
+
+                <Label layoutX="20.0" layoutY="260.0" text="Age Appropriate:" />
+                <TextField fx:id="tfAgeAppropriate" layoutX="150.0" layoutY="255.0" prefWidth="200.0" />
+
+                <!-- Dynamic Fields for Specific Toy Types -->
+                <Label fx:id="lblDynamic1" layoutX="20.0" layoutY="300.0" text="" visible="false" />
+                <TextField fx:id="tfDynamic1" layoutX="150.0" layoutY="295.0" prefWidth="200.0" visible="false" />
+
+                <Label fx:id="lblDynamic2" layoutX="20.0" layoutY="340.0" text="" visible="false" />
+                <TextField fx:id="tfDynamic2" layoutX="150.0" layoutY="335.0" prefWidth="200.0" visible="false" />
+
+                <Label fx:id="lblDynamic3" layoutX="20.0" layoutY="380.0" text="" visible="false" />
+                <TextField fx:id="tfDynamic3" layoutX="150.0" layoutY="375.0" prefWidth="200.0" visible="false" />
+
+                <Button fx:id="btnAddToy" layoutX="150.0" layoutY="420.0" mnemonicParsing="false"
+                        onAction="#handleAddToy" text="Add Toy">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+
+                <Label fx:id="lblMessage" layoutX="150.0" layoutY="460.0" textFill="RED" />
+            </children>
+        </AnchorPane>
+    </content>
+</Tab>
+
+
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
                 </Tab>
