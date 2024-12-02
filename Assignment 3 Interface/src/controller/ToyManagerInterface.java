@@ -15,6 +15,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import model.Animal;
@@ -34,16 +36,28 @@ public class ToyManagerInterface {
 //	ToyGUIManager toyGUIMg;
 
 	@FXML
+	private Button btnDisplayGift;
+
+	@FXML
+	private Button btnClearGift;
+
+	@FXML
+	private Button btnPurchaseGift;
+
+	@FXML
 	private Button btnRemove;
 
 	@FXML
 	private Button btnSave;
 
 	@FXML
-	private ComboBox<?> cbToyTypeDropDown;
+	private ComboBox<String> cbToyTypeDropDown;
 
 	@FXML
 	private Label lblRemoveMsg;
+
+	@FXML
+	private Label lblGiftMsg;
 
 	@FXML
 	private ListView<Toy> lvRemoveItem;
@@ -56,6 +70,18 @@ public class ToyManagerInterface {
 
 	@FXML
 	private TextField tfSerialNum;
+
+	@FXML
+	private TextField tfAge;
+
+	@FXML
+	private TextField tfMaxPrice;
+
+	@FXML
+	private TextField tfMinPrice;
+
+	@FXML
+	private MenuButton menuSelectType;
 
 	/**
 	 * Constructor
@@ -76,27 +102,31 @@ public class ToyManagerInterface {
 	 * 
 	 * @throws IOException
 	 */
-	public void loadToyData() throws IOException {
+	public void loadToyData() {
 		// Path to the file
-		File file = new File(FILE_PATH);
-		String toyline;
-		String[] splittedToyLine;
+		try {
+			File file = new File(FILE_PATH);
+			String toyline;
+			String[] splittedToyLine;
 
-		// Checks if the file exists and reads the file using FileReader and
-		// BufferedReader.
-		if (file.exists()) {
-			FileReader fileReader = new FileReader(file);
-			BufferedReader bufferedFile = new BufferedReader(fileReader);
+			// Checks if the file exists and reads the file using FileReader and
+			// BufferedReader.
+			if (file.exists()) {
+				FileReader fileReader = new FileReader(file);
+				BufferedReader bufferedFile = new BufferedReader(fileReader);
 
-			// Iterating through the file
-			toyline = bufferedFile.readLine(); // Priming read
-			while (toyline != null) { // Checks if the toy exist.
-				splittedToyLine = toyline.split(";"); // Splits the line with semmi-colon.
-				Toy toyType = convertToyType(splittedToyLine); // Converts the appropriate data types
-				toys.add(toyType); // Adds each toy to the Toy arrayList.
-				toyline = bufferedFile.readLine(); // Moves to next line.
+				// Iterating through the file
+				toyline = bufferedFile.readLine(); // Priming read
+				while (toyline != null) { // Checks if the toy exist.
+					splittedToyLine = toyline.split(";"); // Splits the line with semmi-colon.
+					Toy toyType = convertToyType(splittedToyLine); // Converts the appropriate data types
+					toys.add(toyType); // Adds each toy to the Toy arrayList.
+					toyline = bufferedFile.readLine(); // Moves to next line.
+				}
+				bufferedFile.close(); // Closes the BufferedReader object.
 			}
-			bufferedFile.close(); // Closes the BufferedReader object.
+		} catch (IOException e) {
+			System.out.println("File does not exit!");
 		}
 	}
 
@@ -180,7 +210,6 @@ public class ToyManagerInterface {
 				break;
 			case 5:
 				saveExit(); // Saves and exits the program.
-				toyMenu.showThankYouMsg(); // Exit message
 				flag = false;
 				break;
 			}
@@ -239,11 +268,6 @@ public class ToyManagerInterface {
 	@FXML
 	void btnRemoveHandler(ActionEvent event) {
 		removeToy();
-	}
-
-	@FXML
-	void btnSaveHandler(ActionEvent event) throws IOException {
-		saveExit();
 	}
 
 	// public Toy createToyFromInput() {
@@ -308,36 +332,84 @@ public class ToyManagerInterface {
 	// return toy;
 	// }
 
+	@FXML
+	/**
+	 * Retrieves toy type from the drop down list.
+	 * 
+	 * @param event when user selects a toy type.
+	 */
+	void menuSelectTypeHandler(ActionEvent event) {
+		MenuItem selectedType = (MenuItem) event.getSource();
+		menuSelectType.setText(selectedType.getText());
+	}
+
+	@FXML
+	/**
+	 * Displays list of suggest gift toys when user clicks the display button.
+	 * 
+	 * @param event when the user clicks the display button.
+	 */
+	void btnDisplayGiftHandler(ActionEvent event) {
+		giftSuggestion();
+	}
+
+	@FXML
+	void btnClearGiftHandler(ActionEvent event) {
+		lvSuggest.getItems().clear();
+		lblGiftMsg.setText("");
+	}
+
+	@FXML
+	/**
+	 * Allows the user to purchase a gift from the suggested list.
+	 * 
+	 * @param event when user clicks the purchase button.
+	 */
+	void btnPurchaseGiftHandler(ActionEvent event) {
+		int newCount;
+		Toy giftToy = lvSuggest.getSelectionModel().getSelectedItem();
+		if (toys.contains(giftToy)) { // Checks if toy exist in the toys arrayList.
+			if (giftToy.getAvailableCount() > 0) { // Checks if toy is available.
+				newCount = giftToy.getAvailableCount() - 1; // Subtract 1 from the available count for that toy.
+				giftToy.setAvailableCount(newCount); // Sets a new available count for the toy.
+				lvSuggest.getItems().clear();
+				lvSuggest.getItems().add(giftToy);
+			} else {
+
+			}
+		}
+	}
+
 	/**
 	 * Provides a list of gift suggestions based on the details provided by user.
 	 * 
 	 * @throws IOException
 	 */
-	public void giftSuggestion() throws IOException {
-		// Shows the user which details to provide.
-		toyMenu.showProvideDtls();
-
+	public void giftSuggestion() {
 		// Request details from the user.
-		String strAge = toyMenu.askAge();
-		String type = toyMenu.askType();
-		String[] priceRange = toyMenu.askPriceRange();
+		String strAge = tfAge.getText().trim();
+		String type = menuSelectType.getText().trim().toLowerCase();
+		String strMinPrice = tfMinPrice.getText();
+		String strMaxPrice = tfMaxPrice.getText();
 
 		// Empty arrayList to hold all suggested toys.
 		ArrayList<Toy> giftList = new ArrayList<Toy>();
 
-		if ((strAge != null || strAge == null) && (type != null || type == null) && (priceRange != null || priceRange == null)) {
+		if ((strAge != null || strAge == null) && (type != null || type == null)
+				&& (strMinPrice != null || strMinPrice == null || strMaxPrice != null || strMaxPrice == null)) {
+
 			// Converts string age to integer age.
 			int age = 0;
-			if (strAge != null) {
+			if (!strAge.isEmpty()) {
 				age = Integer.parseInt(strAge);
 			}
 
 			// Converts the price string array into minimum and maximum prices
 			double minPrice = 0;
 			double maxPrice = 0;
-			if (priceRange != null) {
-				minPrice = Double.parseDouble(priceRange[0].trim());
-				maxPrice = Double.parseDouble(priceRange[1].trim());
+			if (!strMinPrice.isEmpty() && !strMaxPrice.isEmpty()) {
+				minPrice = Double.parseDouble(strMinPrice.trim());
+				maxPrice = Double.parseDouble(strMaxPrice.trim());
 			}
 
 			// Filtering toys based on the given details.
@@ -350,7 +422,7 @@ public class ToyManagerInterface {
 
 				// Filtering with toy type through polymorphism.
 				boolean typeFilter = false; // Variable used for filtering the toy type.
-				if (type != null && type.length() != 0) {
+				if (!type.isEmpty()) {
 					switch (type) {
 					case "figure":
 						if (toy instanceof Figure)
@@ -364,10 +436,14 @@ public class ToyManagerInterface {
 						if (toy instanceof Puzzle)
 							typeFilter = true;
 						break;
-					case "boardgame":
 					case "board game":
 						if (toy instanceof BoardGame)
 							typeFilter = true;
+						break;
+					case "none":
+						if (!strAge.isEmpty() || !strMinPrice.isEmpty() || !strMaxPrice.isEmpty()) {
+							typeFilter = true;
+						}
 						break;
 					default:
 						typeFilter = false;
@@ -383,73 +459,49 @@ public class ToyManagerInterface {
 				}
 
 				// Adding toy to the suggested list based on the user details
-				if (strAge == null && type == null && priceRange == null) {
-					toyMenu.showNoDtlsMsg(); // No provided details message.
-					break;
-				} else if ((strAge == null || ageFilter) && (type == null || typeFilter) && (priceRange == null || priceFilter)) {
+				if ((strAge.isEmpty() || ageFilter) && (typeFilter)
+						&& (strMinPrice.isEmpty() || strMaxPrice.isEmpty() || priceFilter)) {
 					giftList.add(toy);
 				}
 			}
 
 			// Displaying suggested toy list.
-			int itemIndex = 0;
-			int menuIndex = 0;
 			if (giftList.size() > 0) {
-				toyMenu.showSgtLabel(); // Label for the suggested list.
-				for (int i = 0; i < giftList.size(); i++) {
-					itemIndex = i + 1; // Start index at 1.
-					System.out.println("\t(" + itemIndex + ") " + giftList.get(i).toString()); // Prints all the suggested toys.
-					menuIndex = giftList.size() + 1; // Maximum index plus 1 for main menu.
-				}
-
-				// Showing the specific index to return to the main menu.
-				toyMenu.backToMainMsg(menuIndex);
-
-				// Handling toy index from the gift list.
-				int itemNum = toyMenu.askPurchaseGift(); // Get index from the user selection.
-				Toy giftToy = null;
-				if (itemNum >= 1 && itemNum <= giftList.size()) {
-					giftToy = giftList.get(itemNum - 1); // Adjust index and get toy from the gift list
-				} else if (itemNum == menuIndex) {
-					launchToyApp(); // Resets the program and returns to the main menu.
-				} else {
-					toyMenu.showNotExist(); // No toy exist message.
-				}
-
-				// Allowing the user to purchase a gift from the suggested list.
-				int toyIndex;
-				int newCount;
-				if (toys.contains(giftToy)) { // Checks if toy exist in the toys arrayList.
-					toyIndex = toys.indexOf(giftToy); // Get index of the toy in toys arrayList
-					if (giftToy.getAvailableCount() > 0) { // Checks if toy is available.
-						newCount = toys.get(toyIndex).getAvailableCount() - 1; // Subtract 1 from the available count for that toy.
-						toys.get(toyIndex).setAvailableCount(newCount); // Sets a new available count for the toy.
-						toyMenu.showSuccessMsg(); // Successful transaction message.
-						toyMenu.pressEnter();
-					} else {
-						toyMenu.showOutofStkMsg(); // "Out of stock" message.
-					}
-				}
+				lvSuggest.getItems().clear();
+				lvSuggest.getItems().addAll(giftList); // Prints all the suggested toys.
+				lblGiftMsg.setText("Select a toy");
+			} else {
+				lvSuggest.getItems().clear();
+				lblGiftMsg.setText("No details were provided"); // No provided details message.
 			}
 		}
-		System.out.println();
+	}
+
+	@FXML
+	/*
+	 * Saves to the database when the user clicks the save button.
+	 */
+	void btnSaveHandler(ActionEvent event) {
+		saveExit();
 	}
 
 	/**
 	 * Saves and prints to file
-	 * 
-	 * @throws IOException
 	 */
-	private void saveExit() throws IOException {
+	private void saveExit() {
 		// File handling
-		File toyFile = new File(FILE_PATH);
-		PrintWriter pw = new PrintWriter(toyFile);
+		try {
+			File toyFile = new File(FILE_PATH);
+			PrintWriter pw = new PrintWriter(toyFile);
 
-		// Looping through the toys list and writing to file.
-		for (Toy t : toys) {
-			pw.println(t.format());
+			// Looping through the toys list and writing to file.
+			for (Toy t : toys) {
+				pw.println(t.format());
+			}
+			pw.close(); // Closes the PrintWriter object.
+		} catch (IOException e) {
+			System.out.println("File does not exist!");
 		}
-		pw.close(); // Closes the PrintWriter object.
 	}
 
 	// <--------------------------EXCEPTION METHODS---------------------------->
