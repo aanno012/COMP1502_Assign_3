@@ -82,7 +82,19 @@ public class ToyManagerInterface {
 
 	@FXML
 	private MenuButton menuSelectType;
-
+	
+	@FXML
+  	private TextField tfSerialNumber, tfName, tfBrand, tfPrice, tfAvailableCount, tfAgeAppropriate;
+    
+	@FXML
+        private TextField tfDynamic1, tfDynamic2, tfDynamic3;
+  
+	@FXML
+        private Label lblDynamic1, lblDynamic2, lblDynamic3, lblMessage;
+  
+	@FXML
+        private Button btnAddToy;
+	
 	/**
 	 * Constructor
 	 * 
