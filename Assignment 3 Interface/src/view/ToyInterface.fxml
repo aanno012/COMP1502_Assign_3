@@ -96,6 +96,43 @@
                               <TextField layoutX="156.0" layoutY="445.0" />
                               <Separator layoutX="376.0" layoutY="-14.0" orientation="VERTICAL" prefHeight="539.0" prefWidth="5.0" />
                               <Label layoutX="496.0" layoutY="41.0" text="Figure">
+<items>
+        							<FXCollections fx:factory="observableArrayList">
+           								 <String fx:value="Figure" />
+          								 <String fx:value="Animal" />
+            							 <String fx:value="Puzzle" />
+           								 <String fx:value="Board Game" />
+        							</FXCollections>
+   								</items>
+							  </ComboBox>
+							  
+							  <VBox spacing="10" alignment="CENTER">
+    <GridPane fx:id="figurePane" visible="false" hgap="10" vgap="10">
+        <Label text="Classification:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfClassification" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <GridPane fx:id="animalPane" visible="false" hgap="10" vgap="10">
+        <Label text="Material:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfMaterial" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Size:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfSize" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <GridPane fx:id="puzzlePane" visible="false" hgap="10" vgap="10">
+        <Label text="Type:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfPuzzleType" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <GridPane fx:id="boardGamePane" visible="false" hgap="10" vgap="10">
+        <Label text="Minimum Number of Players:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfMinPlayers" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Maximum Number of Players:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfMaxPlayers" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Designers:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfDesigners" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    </GridPane>
+</VBox>
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -109,7 +146,7 @@
                               <Separator layoutX="453.0" layoutY="332.0" prefHeight="4.0" prefWidth="123.0" />
                               <Separator layoutX="748.0" layoutY="336.0" prefHeight="3.0" prefWidth="118.0" />
                               <Label layoutX="400.0" layoutY="71.0" text="Classification">
-                                 <font>
+                                 <font>a
                                     <Font size="16.0" />
                                  </font>
                               </Label>
