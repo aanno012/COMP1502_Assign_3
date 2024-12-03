@@ -1,0 +1,23 @@
+package mru.toys.exceptions;
+
+/**
+ * This class handles error messages for toy validation errors.
+ */
+public class ToyValidationException extends Exception {
+
+    /**
+     * Constructor that accepts an error message.
+     * 
+     * @param error the error message
+     */
+    public ToyValidationException(String error) {
+        super(error);
+    }
+
+    /**
+     * Default constructor with a generic error message.
+     */
+    public ToyValidationException() {
+        super("Toy validation failed due to invalid input.");
+    }
+}
