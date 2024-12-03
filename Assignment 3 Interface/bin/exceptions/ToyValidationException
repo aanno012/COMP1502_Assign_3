@@ -1,0 +1,9 @@
+package mru.toys.exceptions;
+
+public class ToyValidationException extends Exception{
+	
+	public ToyValidationException(String error) {
+		super(error);
+	}
+
+}
