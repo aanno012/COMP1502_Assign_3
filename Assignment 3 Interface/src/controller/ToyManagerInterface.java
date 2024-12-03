@@ -24,6 +24,10 @@ import model.BoardGame;
 import model.Figure;
 import model.Puzzle;
 import model.Toy;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 
 public class ToyManagerInterface {
 	/**
@@ -84,16 +88,16 @@ public class ToyManagerInterface {
 	private MenuButton menuSelectType;
 	
 	@FXML
-  	private TextField tfSerialNumber, tfName, tfBrand, tfPrice, tfAvailableCount, tfAgeAppropriate;
+    private TextField tfSerialNumber, tfName, tfBrand, tfPrice, tfAvailableCount, tfAgeAppropriate;
     
 	@FXML
-        private TextField tfDynamic1, tfDynamic2, tfDynamic3;
+    private TextField tfDynamic1, tfDynamic2, tfDynamic3;
   
 	@FXML
-        private Label lblDynamic1, lblDynamic2, lblDynamic3, lblMessage;
+    private Label lblDynamic1, lblDynamic2, lblDynamic3, lblMessage;
   
 	@FXML
-        private Button btnAddToy;
+    private Button btnAddToy;
 	
 	/**
 	 * Constructor
@@ -282,68 +286,95 @@ public class ToyManagerInterface {
 		removeToy();
 	}
 
-	// public Toy createToyFromInput() {
-	// System.out.print("Enter Serial Number: ");
-	// String serialNumber = toyMenu.askSerialNum();
-	// System.out.print("Enter Toy Name: ");
-	// String name = input.nextLine().trim();
-	// while (name.isEmpty()) {
-	// System.out.println("Please enter a valid name.");
-	// System.out.print("Enter Toy Name: ");
-	// name = input.nextLine().trim();
-	// }
-	// System.out.print("Enter Brand: ");
-	// String brand = input.nextLine().trim();
-	// while (brand.isEmpty()) {
-	// System.out.println("Please enter a valid brand.");
-	// System.out.print("Enter Brand: ");
-	// brand = input.nextLine().trim();
-	// }
-	// double price = -1;
+	public Toy createToyFromInput() {
+	    Scanner scanner = new Scanner(System.in);
+	    Toy newToy = null;
 
-	// while (price <= 0) {
-	// System.out.print("Enter Price: ");
-	// if (input.hasNextDouble()) {
-	// price = input.nextDouble();
-	// if (price <= 0) {
-	// System.out.println("Price must be positive. Enter a valid price.");
-	// }
-	// } else {
-	// System.out.println("Enter a numeric value for price.");
-	// input.next(); // Consume invalid input
-	// }
-	// }
-	// int availableCount = -1;
-	// while (availableCount < 0) {
-	// System.out.print("Enter Available Count: ");
-	// if (input.hasNextInt()) {
-	// availableCount = input.nextInt();
-	// if (availableCount < 0) {
-	// System.out.println("Please enter a valid count.");
-	// }
-	// } else {
-	// System.out.println("Invalid input.");
-	// input.next(); // Consume invalid input
-	// }
-	// }
-	// input.nextLine(); // Consume newline after number input
-	// System.out.print("Enter Minimum Age: ");
-	// int ageAppropriate = input.nextInt();
-	// input.nextLine(); // Consume newline
-	// System.out.print("Enter Minimum Players: ");
-	// int minimumPlayers = input.nextInt();
-	// input.nextLine(); // Consume newline
-	// System.out.print("Enter Maximum Players: ");
-	// int maximumPlayers = input.nextInt();
-	// input.nextLine(); // Consume newline
-	// System.out.print("Enter Designer Names: ");
-	// String designerNames = input.nextLine().trim();
-	// // Now you can create a Toy object using the collected information
-	// Toy toy = new Toy(serialNumber, name, brand, price, availableCount,
-	// ageAppropriate, minimumPlayers, maximumPlayers, designerNames);
-	// return toy;
-	// }
+	    try {
+	        // Collecting common toy attributes
+	        System.out.println("Enter Serial Number:");
+	        String serialNumber = scanner.nextLine();
 
+	        System.out.println("Enter Toy Name:");
+	        String name = scanner.nextLine();
+
+	        System.out.println("Enter Toy Brand:");
+	        String brand = scanner.nextLine();
+
+	        System.out.println("Enter Toy Price:");
+	        double price = Double.parseDouble(scanner.nextLine());
+
+	        System.out.println("Enter Available Count:");
+	        int availableCount = Integer.parseInt(scanner.nextLine());
+
+	        System.out.println("Enter Appropriate Age:");
+	        int ageAppropriate = Integer.parseInt(scanner.nextLine());
+
+	        char firstSerialDigit = serialNumber.charAt(0);
+
+	        // Determine toy type based on the serial number's first digit
+	        switch (firstSerialDigit) {
+	            case '0':
+	            case '1': // Figure
+	                System.out.println("Enter Classification (A for Action, D for Doll, H for Historic):");
+	                char classification = scanner.nextLine().toUpperCase().charAt(0);
+	                newToy = new Figure(serialNumber, name, brand, price, availableCount, ageAppropriate, classification);
+	                break;
+
+	            case '2':
+	            case '3': // Animal
+	                System.out.println("Enter Material (Plush, Wood, Plastic):");
+	                String material = scanner.nextLine();
+	                System.out.println("Enter Size (Small, Medium, Large):");
+	                char size = scanner.nextLine();
+	                newToy = new Animal(serialNumber, name, brand, price, availableCount, ageAppropriate, material, size);
+	                break;
+
+	            case '4':
+	            case '5':
+	            case '6': // Puzzle
+	            	System.out.println("Enter Puzzle Type (3D, Jigsaw, Crossword):");
+	               String puzzleType = scanner.nextLine();
+	                System.out.println("Enter Number of Pieces:");
+	                int numberOfPieces = Integer.parseInt(scanner.nextLine());
+	                newToy = new Puzzle(serialNumber, name, brand, price, availableCount, ageAppropriate, numberOfPieces, puzzleType);
+	                break;
+
+	            case '7':
+	            case '8':
+	            case '9': // Board Game
+	                System.out.println("Enter Minimum Number of Players:");
+	                int minPlayers = Integer.parseInt(scanner.nextLine());
+	                System.out.println("Enter Maximum Number of Players:");
+	                int maxPlayers = Integer.parseInt(scanner.nextLine());
+	                System.out.println("Enter Designers (comma-separated):");
+	                String designers = scanner.nextLine();
+	                newToy = new BoardGame(serialNumber, name, brand, price, availableCount, ageAppropriate, minPlayers, maxPlayers, designers);
+	                break;
+
+	            default:
+	                return null;
+	        }
+
+	        // Validate and add to the toy list
+	        if (newToy != null) {
+	            newToy.validate(); // Ensure toy data meets requirements
+	            toys.add(newToy);
+	            System.out.println("Toy added successfully!");
+	        }
+
+	    } catch (NumberFormatException e) {
+	        System.out.println("Invalid input! Please enter the correct data type.");
+	    } catch (ToyValidationException e) {
+	        System.out.println("Validation Error: " + e.getMessage());
+	    } catch (Exception e) {
+	        System.out.println("An unexpected error occurred: " + e.getMessage());
+	    }
+
+	    return newToy;
+	}
+
+	
 	@FXML
 	/**
 	 * Retrieves toy type from the drop down list.
@@ -370,7 +401,155 @@ public class ToyManagerInterface {
 		lvSuggest.getItems().clear();
 		lblGiftMsg.setText("");
 	}
+	
+	@FXML
+	private ComboBox<String> cbCategory;
 
+	@FXML
+	private GridPane figurePane, animalPane, puzzlePane, boardGamePane;
+	
+	@FXML
+	private ComboBox<String> cbCategory;
+
+	@FXML
+	private GridPane figurePane, animalPane, puzzlePane, boardGamePane;
+	
+	void btnAddToyHandler(ActionEvent event) {
+	    // Retrieve the basic toy details
+	    String toyName = tfToyName.getText();
+	    String selectedCategory = cbCategory.getValue();
+	    double toyPrice;
+	    int toyCount;
+
+	    try {
+	        toyPrice = Double.parseDouble(tfToyPrice.getText());
+	        toyCount = Integer.parseInt(tfToyCount.getText());
+	    } catch (NumberFormatException e) {
+	        lblGiftMsg.setText("Invalid price or count. Please enter valid numbers.");
+	        return;
+	    }
+
+	    if (toyName == null || toyName.trim().isEmpty()) {
+	        lblGiftMsg.setText("Please enter a valid toy name.");
+	        return;
+	    }
+
+	    // Declare the Toy object to hold the created toy
+	    Toy newToy = null;
+
+	    // Handle category-specific details
+	    switch (selectedCategory) {
+	        case "Figure":
+	            String classification = tfClassification.getText();
+	            newToy = new Figure(toyName, toyPrice, toyCount, classification);
+	            break;
+
+	        case "Animal":
+	            String material = tfMaterial.getText();
+	            String size = tfSize.getText();
+	            newToy = new Animal(toyName, toyPrice, toyCount, material, size);
+	            break;
+
+	        case "Puzzle":
+	            String puzzleType = tfPuzzleType.getText();
+	            newToy = new Puzzle(toyName, toyPrice, toyCount, puzzleType);
+	            break;
+
+	        case "Board Game":
+	            int minPlayers, maxPlayers;
+	            String designers = tfDesigners.getText();
+	            try {
+	                minPlayers = Integer.parseInt(tfMinPlayers.getText());
+	                maxPlayers = Integer.parseInt(tfMaxPlayers.getText());
+	            } catch (NumberFormatException e) {
+	                lblGiftMsg.setText("Invalid player count. Please enter valid numbers.");
+	                return;
+	            }
+	            newToy = new BoardGame(toyName, toyPrice, toyCount, minPlayers, maxPlayers, designers);
+	            break;
+
+	        default:
+	            lblGiftMsg.setText("Please select a valid category.");
+	            return;
+	    }
+
+	    // Add the toy to the list if it doesn't already exist
+	    if (newToy != null && !toys.contains(newToy)) {
+	        toys.add(newToy);
+	        lvToys.getItems().add(newToy);
+	        lblGiftMsg.setText("Toy added successfully!");
+	    } else {
+	        lblGiftMsg.setText("Toy already exists in the inventory.");
+	    }
+
+	    // Clear input fields after adding
+	    tfToyName.clear();
+	    tfToyPrice.clear();
+	    tfToyCount.clear();
+	    tfClassification.clear();
+	    tfMaterial.clear();
+	    tfSize.clear();
+	    tfPuzzleType.clear();
+	    tfMinPlayers.clear();
+	    tfMaxPlayers.clear();
+	    tfDesigners.clear();
+	    
+	    cbCategory.valueProperty().addListener((obs, oldVal, newVal) -> {
+	    // Hide all panes by default
+	    figurePane.setVisible(false);
+	    animalPane.setVisible(false);
+	    puzzlePane.setVisible(false);
+	    boardGamePane.setVisible(false);
+
+	    // Show the appropriate pane based on the selected category
+	    switch (newVal) {
+	        case "Figure":
+	            figurePane.setVisible(true);
+	            break;
+	        case "Animal":
+	            animalPane.setVisible(true);
+	            break;
+	        case "Puzzle":
+	            puzzlePane.setVisible(true);
+	            break;
+	        case "Board Game":
+	            boardGamePane.setVisible(true);
+	            break;
+	        default:
+	            // No need to do anything as all panes are hidden by default
+	            break;
+	    }
+	    }
+	};
+	    
+	//Saving the toy 
+	private void saveToy() {
+	    String category = cbCategory.getValue();
+	    if (category == null) {
+	        System.out.println("Please select a category.");
+	        return;
+	    }
+
+	    switch (category) {
+	        case "Figure":
+	            String classification = tfClassification.getText();
+	            break;
+	        case "Animal":
+	            String material = tfMaterial.getText();
+	            String size = tfSize.getText();
+	            break;
+	        case "Puzzle":
+	            String type = tfPuzzleType.getText();
+	            break;
+	        case "Board Game":
+	            int minPlayers = Integer.parseInt(tfMinPlayers.getText());
+	            int maxPlayers = Integer.parseInt(tfMaxPlayers.getText());
+	            String designers = tfDesigners.getText();
+	            break;
+	    }
+	}
+	
+	
 	@FXML
 	/**
 	 * Allows the user to purchase a gift from the suggested list.
@@ -534,7 +713,122 @@ public class ToyManagerInterface {
 
 		return true; // Returns true if price is positive and bypasses the exception.
 	}
+	
+	public static boolean ToyValidationException (String category) throws handleCategoryException() {
+	    String category = cbCategory.getValue(); // Get selected category
+	    if (category == null || category.isEmpty()) {
+	        System.out.println("Please select a category.");
+	        return;
+	    }
+	    System.out.println("Selected Category: " + category);
+	}
+	
+	public Toy createToyFromInput1() throws ToyValidationException {
+	    Scanner scanner = new Scanner(System.in);
+	    Toy newToy = null;
 
+	    try {
+	        // Collecting common toy attributes
+	        if (serialNumber.isEmpty()) {
+	            throw new ToyValidationException("Serial number cannot be empty.");
+	        }
+	        
+	        if (name.isEmpty()) {
+	            throw new ToyValidationException("Toy name cannot be empty.");
+	        }
+
+	        if (brand.isEmpty()) {
+	            throw new ToyValidationException("Toy brand cannot be empty.");
+	        }
+
+	       
+	        if (price <= 0) {
+	            throw new ToyValidationException("Price must be greater than zero.");
+	        }
+
+	       
+	        if (availableCount < 0) {
+	            throw new ToyValidationException("Available count cannot be negative.");
+	        }
+
+	       
+	        if (ageAppropriate < 0 || ageAppropriate > 18) {
+	            throw new ToyValidationException("Appropriate age must be between 0 and 18.");
+	        }
+
+	        char firstSerialDigit = serialNumber.charAt(0);
+
+	        // Category-specific attributes
+	        switch (firstSerialDigit) {
+	            case '0':
+	            case '1': // Figure
+	                System.out.println("Enter Classification (A for Action, D for Doll, H for Historic):");
+	                char classification = scanner.nextLine().toUpperCase().charAt(0);
+	                if (classification != 'A' && classification != 'D' && classification != 'H') {
+	                    throw new ToyValidationException("Invalid classification for a figure. Must be 'A', 'D', or 'H'.");
+	                }
+	                newToy = new Figure(serialNumber, name, brand, price, availableCount, ageAppropriate, classification);
+	                break;
+
+	            case '2':
+	            case '3': // Animal
+	                System.out.println("Enter Material (Plush, Wood, Plastic):");
+	                String material = scanner.nextLine();
+	                if (!material.equalsIgnoreCase("Plush") && !material.equalsIgnoreCase("Wood") && !material.equalsIgnoreCase("Plastic")) {
+	                    throw new ToyValidationException("Invalid material for an animal toy. Must be 'Plush', 'Wood', or 'Plastic'.");
+	                }
+	                System.out.println("Enter Size (Small, Medium, Large):");
+	                String size = scanner.nextLine();
+	                if (!size.equalsIgnoreCase("Small") && !size.equalsIgnoreCase("Medium") && !size.equalsIgnoreCase("Large")) {
+	                    throw new ToyValidationException("Invalid size for an animal toy. Must be 'Small', 'Medium', or 'Large'.");
+	                }
+	                newToy = new Animal(serialNumber, name, brand, price, availableCount, ageAppropriate, material, size);
+	                break;
+
+	            case '4':
+	            case '5':
+	            case '6': // Puzzle
+	                System.out.println("Enter Puzzle Type (3D, Jigsaw, Crossword):");
+	                String puzzleType = scanner.nextLine();
+	                if (!puzzleType.equalsIgnoreCase("3D") && !puzzleType.equalsIgnoreCase("Jigsaw") && !puzzleType.equalsIgnoreCase("Crossword")) {
+	                    throw new ToyValidationException("Invalid puzzle type. Must be '3D', 'Jigsaw', or 'Crossword'.");
+	                }
+	                System.out.println("Enter Number of Pieces:");
+	                int numberOfPieces = Integer.parseInt(scanner.nextLine());
+	                if (numberOfPieces <= 0) {
+	                    throw new ToyValidationException("Number of pieces must be greater than zero.");
+	                }
+	                newToy = new Puzzle(serialNumber, name, brand, price, availableCount, ageAppropriate, numberOfPieces, puzzleType);
+	                break;
+
+	            case '7':
+	            case '8':
+	            case '9': // Board Game
+	                System.out.println("Enter Minimum Number of Players:");
+	                int minPlayers = Integer.parseInt(scanner.nextLine());
+	                System.out.println("Enter Maximum Number of Players:");
+	                int maxPlayers = Integer.parseInt(scanner.nextLine());
+	                if (minPlayers <= 0 || maxPlayers <= 0 || minPlayers > maxPlayers) {
+	                    throw new ToyValidationException("Invalid number of players. Minimum and maximum players must be greater than zero, and minPlayers <= maxPlayers.");
+	                }
+	                System.out.println("Enter Designers (comma-separated):");
+	                String designers = scanner.nextLine();
+	                if (designers.isEmpty()) {
+	                    throw new ToyValidationException("Designers cannot be empty for a board game.");
+	                }
+	                newToy = new BoardGame(serialNumber, name, brand, price, availableCount, ageAppropriate, minPlayers, maxPlayers, designers);
+	                break;
+
+	            default:
+	                throw new ToyValidationException("Invalid serial number. Unable to determine toy category.");
+	        }
+
+	    } catch (NumberFormatException e) {
+	        throw new ToyValidationException("Invalid input format. Please enter numbers where required.");
+	    }
+
+	    return newToy;
+	}
 	/**
 	 * 
 	 * @param minPlys the minimum # of players to play the game.
